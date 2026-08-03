@@ -1,1 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Hunter's Path</title>
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    background: #0a0a0a;
+    overflow: hidden;
+    width: 100%; height: 100%;
+  }
+  #game-container {
+    width: 100vw; height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #rotate-notice {
+    position: fixed; inset: 0;
+    background: #0a0a0a;
+    color: #f0e6d2;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: -apple-system, sans-serif;
+    text-align: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  #rotate-notice.show { display: flex; }
+  #rotate-icon { font-size: 60px; margin-bottom: 16px; animation: spin 2s ease-in-out infinite; }
+  @keyframes spin {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(90deg); }
+  }
+  #controls {
+    position: fixed; bottom: 16px; left: 0; right: 0; z-index: 50;
+    display: flex; justify-content: space-between; padding: 0 20px;
+    pointer-events: none;
+  }
+  .ctrl-group { display: flex; gap: 10px; pointer-events: auto; }
+  .ctrl-btn {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    color: #f0e6d2; font-size: 26px; display: flex; align-items: center; justify-content: center;
+    -webkit-user-select: none; user-select: none;
+  }
+  .ctrl-btn:active { background: rgba(232,184,75,0.5); }
+  #jump-btn {
+    width: 72px; height: 72px;
+    background: rgba(232,184,75,0.25); border: 1px solid rgba(232,184,75,0.5);
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+</head>
+<body>
 
+<div id="rotate-notice">
+  <div id="rotate-icon">📱</div>
+  <div style="font-size:18px; font-weight:600;">Turn your phone sideways</div>
+  <div style="font-size:14px; opacity:0.6; margin-top:6px;">Hunter's Path plays in landscape mode</div>
+</div>
+
+<div id="game-container"></div>
+
+<div id="controls">
+  <div class="ctrl-group">
+    <button class="ctrl-btn" id="btn-left">◀</button>
+    <button class="ctrl-btn" id="btn-right">▶</button>
+  </div>
+  <div class="ctrl-group">
+    <button class="ctrl-btn" id="jump-btn">⤴</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+<script>
+  function checkOrientation() {
+    const notice = document.getElementById("rotate-notice");
+    if (window.innerHeight > window.innerWidth) {
+      notice.classList.add("show");
+    } else {
+      notice.classList.remove("show");
+    }
+  }
+  window.addEventListener("resize", checkOrientation);
+  window.addEventListener("orientationchange", checkOrientation);
+  checkOrientation();
+
+  if (screen.orientation && screen.orientation.lock) {
+    screen.orientation.lock("landscape").catch(() => {});
+  }
+</script>
+
+</body>
+</html>
